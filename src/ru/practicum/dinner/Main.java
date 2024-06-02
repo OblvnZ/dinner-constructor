@@ -59,14 +59,22 @@ public class Main {
 
     private static void generateDishCombo() {
         ArrayList<String> types = new ArrayList<>();
-
+        if (menu.isEmpty()) {
+            System.out.println("Список блюд пуст.");
+            System.out.println("-".repeat(30));
+            return;
+        }
         System.out.println("Начинаем конструировать обед...");
 
         System.out.println("Введите количество наборов, которые нужно сгенерировать:");
         int numberOfCombos = scanner.nextInt();
+        while (numberOfCombos < 1) {
+            System.out.println("Количество наборов не может быть меньше 1, введите другое число.");
+            numberOfCombos = scanner.nextInt();
+        }
         scanner.nextLine();
 
-        System.out.println("Вводите типы блюда, разделяя символом переноса строки (enter)." +
+        System.out.println("Введите типы блюда, разделяя символом переноса строки (enter)." +
                 " Для завершения ввода введите пустую строку");
         String nextItem = ".";
 

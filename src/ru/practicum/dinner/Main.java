@@ -1,11 +1,13 @@
 package ru.practicum.dinner;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
     static DinnerConstructor dc;
     static Scanner scanner;
+    static HashMap<String, ArrayList<String>> menu = new HashMap<>();
+
 
     public static void main(String[] args) {
         dc = new DinnerConstructor();
@@ -23,7 +25,11 @@ public class Main {
                     generateDishCombo();
                     break;
                 case "3":
+                    System.out.println("Работа программы оконченна!");
                     return;
+                default:
+                    System.out.println("Такой комманды нет.");
+                    System.out.println("-".repeat(30));
             }
         }
     }
@@ -41,25 +47,43 @@ public class Main {
         System.out.println("Введите название блюда:");
         String dishName = scanner.nextLine();
 
+        if (dc.addNewDish(menu, dishType, dishName)) {
+            System.out.println("-".repeat(30));
+        } else {
+            System.out.println("Такое блюдо уже существует в данной категории.");
+            System.out.println("-".repeat(30));
+        }
         // добавьте новое блюдо
+
     }
 
     private static void generateDishCombo() {
+        ArrayList<String> types = new ArrayList<>();
+
         System.out.println("Начинаем конструировать обед...");
 
         System.out.println("Введите количество наборов, которые нужно сгенерировать:");
         int numberOfCombos = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.println("Вводите типы блюда, разделяя символом переноса строки (enter). Для завершения ввода введите пустую строку");
-        String nextItem = scanner.nextLine();
+        System.out.println("Вводите типы блюда, разделяя символом переноса строки (enter)." +
+                " Для завершения ввода введите пустую строку");
+        String nextItem = ".";
 
-        //реализуйте ввод типов блюд
         while (!nextItem.isEmpty()) {
-
+            nextItem = scanner.nextLine();
+            if (!menu.containsKey(nextItem) && !nextItem.isEmpty()) {
+                System.out.println(nextItem + " - такого типа блюд нет в списке. Введите другой тип.");
+            } else if (!nextItem.isEmpty()) {
+                types.add(nextItem);
+            }
         }
 
-        // сгенерируйте комбинации блюд и выведите на экран
-
+        ArrayList<ArrayList<String>> combo = dc.generateCombo(menu, types, numberOfCombos);
+        for (int i = 0; i < combo.size(); i++) {
+            System.out.println("Комбо " + (i + 1));
+            System.out.println(combo.get(i));
+            System.out.println("-".repeat(30));
+        }
     }
 }
